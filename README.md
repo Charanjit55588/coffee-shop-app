@@ -4,6 +4,12 @@ A small coffee shop web app (React + Vite) with an in-memory mock backend (Expre
 
 The user journey: **Login → Home → Product → Cart → Checkout → Order confirmed**, plus Create account, Forgot password, Favorites and Profile (details, address, notification preferences, log out).
 
+<p align="center">
+  <img src="docs/demo.gif" width="300" alt="Walkthrough: sign in, browse and filter products, save a favorite, choose grind and size and add to cart, apply a promo code, check out, then change notification settings and switch to dark mode in Profile">
+</p>
+
+<p align="center"><sub>45-second walkthrough, recorded automatically with Playwright (<code>npm run demo:record</code>).</sub></p>
+
 ## Run it
 
 Needs Node 20 or newer.
@@ -24,6 +30,7 @@ Other scripts:
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | API + the built app on http://localhost:4173 |
 | `npm run api` | Just the API |
+| `npm run demo:record` | Re-records `docs/demo.gif` (needs `npm run dev` running and Google Chrome installed). Resets the seed data before and after |
 
 Environment variables:
 
@@ -135,4 +142,6 @@ src/api.js     Fetch wrapper, token storage, money formatting
 src/AppContext.jsx  Session, cart count and favorites state
 src/components/     Tab bar, shared controls, icons
 src/pages/     One file per screen
+scripts/       record-demo.mjs: Playwright script that records docs/demo.gif
+docs/          demo.gif shown at the top of this README
 ```

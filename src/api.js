@@ -1,5 +1,9 @@
 const TOKEN_KEY = 'bb_token';
 
+// Where the API lives. Empty (the default) means same origin, so web dev uses the Vite proxy.
+// The Android build sets VITE_API_BASE=http://10.0.2.2:4000 (the emulator's alias for the host).
+const API_BASE = (import.meta.env.VITE_API_BASE || '').replace(/\/$/, '');
+
 // "Remember me" keeps the token in localStorage; otherwise it lives only for the tab.
 export const tokenStore = {
   get() {
@@ -28,7 +32,7 @@ async function request(method, path, body) {
   const token = tokenStore.get();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}/api${path}`, {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),

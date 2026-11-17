@@ -3,11 +3,12 @@ import { Link, NavLink } from 'react-router-dom';
 import { useApp } from '../AppContext.jsx';
 import { BackIcon, BagIcon, HeartIcon, HomeIcon, UserIcon } from './Icons.jsx';
 import ProductArt from './ProductArt.jsx';
+import { tid } from '../testid.js';
 
 // Uses the product's photo when it has one, otherwise a drawn illustration.
 export function ProductImage({ product, className = '', testId }) {
   return (
-    <span className={`ph ${className}`} role="img" aria-label={product.name} data-testid={testId}>
+    <span className={`ph ${className}`} role="img" aria-label={product.name} {...tid(testId)}>
       {product.image ? <img src={product.image} alt="" /> : <ProductArt product={product} />}
     </span>
   );
@@ -15,7 +16,7 @@ export function ProductImage({ product, className = '', testId }) {
 
 export function BackLink({ to, label, testId }) {
   return (
-    <Link to={to} className="icon-btn" aria-label={label} data-testid={testId}>
+    <Link to={to} className="icon-btn" aria-label={label} {...tid(testId)}>
       <BackIcon size={22} />
     </Link>
   );
@@ -43,7 +44,7 @@ export function FavoriteButton({ product, className = '', testId }) {
       aria-pressed={isFavorite}
       disabled={busy}
       onClick={onClick}
-      data-testid={testId}
+      {...tid(testId)}
     >
       <HeartIcon size={20} filled={isFavorite} />
     </button>
@@ -58,11 +59,11 @@ export function Stepper({ value, onChange, min = 1, max = 10, label, testIdPrefi
         aria-label="Decrease quantity"
         disabled={disabled || value <= min}
         onClick={() => onChange(value - 1)}
-        data-testid={`${testIdPrefix}-decrease`}
+        {...tid(`${testIdPrefix}-decrease`)}
       >
         −
       </button>
-      <span aria-live="polite" data-testid={`${testIdPrefix}-value`}>
+      <span aria-live="polite" {...tid(`${testIdPrefix}-value`)}>
         {value}
       </span>
       <button
@@ -70,7 +71,7 @@ export function Stepper({ value, onChange, min = 1, max = 10, label, testIdPrefi
         aria-label="Increase quantity"
         disabled={disabled || value >= max}
         onClick={() => onChange(value + 1)}
-        data-testid={`${testIdPrefix}-increase`}
+        {...tid(`${testIdPrefix}-increase`)}
       >
         +
       </button>
@@ -88,8 +89,8 @@ export function Toast({ toast, onDone }) {
 
   if (!toast) return null;
   return (
-    <div className="toast" role="status" data-testid="toast">
-      <span data-testid="toast-message">{toast.message}</span>
+    <div className="toast" role="status" {...tid('toast')}>
+      <span {...tid('toast-message')}>{toast.message}</span>
       {toast.action}
     </div>
   );
@@ -97,7 +98,7 @@ export function Toast({ toast, onDone }) {
 
 export function Loading({ label = 'Loading…' }) {
   return (
-    <p className="muted center pad" role="status" data-testid="loading">
+    <p className="muted center pad" role="status" {...tid('loading')}>
       {label}
     </p>
   );
@@ -112,15 +113,15 @@ export function TabBar() {
     { to: '/profile', label: 'Profile', icon: UserIcon, id: 'profile' },
   ];
   return (
-    <nav aria-label="Main" className="tabbar" data-testid="tab-bar">
+    <nav aria-label="Main" className="tabbar" {...tid('tab-bar')}>
       {tabs.map(({ to, label, icon: TabIcon, id, end }) => (
-        <NavLink key={id} to={to} end={end} className="tab" data-testid={`tab-${id}`}>
+        <NavLink key={id} to={to} end={end} className="tab" {...tid(`tab-${id}`)}>
           {({ isActive }) => (
             <>
               <TabIcon size={24} filled={isActive && id === 'favorites'} />
               {label}
               {id === 'cart' && cartCount > 0 && (
-                <span className="badge" data-testid="cart-badge" aria-label={`${cartCount} items in cart`}>
+                <span className="badge" {...tid('cart-badge')} aria-label={`${cartCount} items in cart`}>
                   {cartCount}
                 </span>
               )}

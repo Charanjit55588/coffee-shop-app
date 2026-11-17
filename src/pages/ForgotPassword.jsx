@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { api, EMAIL_RE } from '../api.js';
 import { BackLink } from '../components/common.jsx';
 import { CheckIcon } from '../components/Icons.jsx';
+import { tid } from '../testid.js';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -28,17 +29,16 @@ export default function ForgotPassword() {
   }
 
   return (
-    <main className="page auth-page" data-testid="screen-forgot-password">
+    <main className="page auth-page" {...tid('screen-forgot-password')}>
       <BackLink to="/login" label="Back to sign in" testId="forgot-back" />
       <div className="stack-sm">
         <h1 className="h1">Reset your password</h1>
         <p className="muted">Enter the email you signed up with and we’ll send you a link to reset your password.</p>
       </div>
-      <form className="stack" onSubmit={onSubmit} noValidate data-testid="forgot-form">
+      <form className="stack" onSubmit={onSubmit} noValidate {...tid('forgot-form')}>
         <div className="field">
           <label htmlFor="forgot-email">Email</label>
           <input
-            id="forgot-email"
             type="email"
             placeholder="you@example.com"
             className={`input ${error ? 'invalid' : ''}`}
@@ -46,27 +46,27 @@ export default function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? 'forgot-email-error' : undefined}
-            data-testid="forgot-email"
+            {...tid('forgot-email')}
           />
           {error && (
-            <p id="forgot-email-error" className="field-error" data-testid="forgot-email-error">
+            <p className="field-error" {...tid('forgot-email-error')}>
               {error}
             </p>
           )}
         </div>
-        <button type="submit" className="btn btn-primary" disabled={submitting} data-testid="forgot-submit">
+        <button type="submit" className="btn btn-primary" disabled={submitting} {...tid('forgot-submit')}>
           {submitting ? 'Sending…' : 'Send reset link'}
         </button>
       </form>
       {success && (
-        <div className="alert alert-success" role="status" data-testid="forgot-success">
+        <div className="alert alert-success" role="status" {...tid('forgot-success')}>
           <CheckIcon size={20} />
           <span>{success}</span>
         </div>
       )}
       <p className="muted center push-bottom">
         Remembered it?{' '}
-        <Link to="/login" className="link-strong" data-testid="forgot-signin-link">
+        <Link to="/login" className="link-strong" {...tid('forgot-signin-link')}>
           Back to sign in
         </Link>
       </p>

@@ -4,6 +4,7 @@ import { api, formatMoney } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { FavoriteButton, Loading, ProductImage } from '../components/common.jsx';
 import { SearchIcon } from '../components/Icons.jsx';
+import { tid } from '../testid.js';
 
 export default function Home() {
   const { user } = useApp();
@@ -49,16 +50,16 @@ export default function Home() {
   const firstName = user?.name?.split(' ')[0];
 
   return (
-    <main className="page" data-testid="screen-home">
+    <main className="page" {...tid('screen-home')}>
       <header className="stack-xs">
-        <p className="muted" data-testid="home-greeting">
+        <p className="muted" {...tid('home-greeting')}>
           Hi, {firstName}
         </p>
         <h1 className="h1">What are you brewing today?</h1>
       </header>
 
       {location.state?.welcome && (
-        <p className="alert alert-success" role="status" data-testid="home-welcome">
+        <p className="alert alert-success" role="status" {...tid('home-welcome')}>
           Welcome to Bean &amp; Brew! Your account is ready.
         </p>
       )}
@@ -69,17 +70,16 @@ export default function Home() {
         </label>
         <SearchIcon size={20} className="search-icon" />
         <input
-          id="home-search"
           type="search"
           className="input"
           placeholder="Search beans, mugs, tumblers…"
           value={q}
           onChange={(e) => update({ q: e.target.value })}
-          data-testid="home-search"
+          {...tid('home-search')}
         />
       </div>
 
-      <div role="group" aria-label="Categories" className="chips" data-testid="home-categories">
+      <div role="group" aria-label="Categories" className="chips" {...tid('home-categories')}>
         {[{ id: 'all', label: 'All' }, ...categories].map((c) => (
           <button
             key={c.id}
@@ -87,7 +87,7 @@ export default function Home() {
             className="chip"
             aria-pressed={category === c.id}
             onClick={() => update({ category: c.id })}
-            data-testid={`category-${c.id}`}
+            {...tid(`category-${c.id}`)}
           >
             {c.label}
           </button>
@@ -95,53 +95,54 @@ export default function Home() {
       </div>
 
       <div className="row-between">
-        <h2 className="h2" data-testid="product-results-heading">
+        <h2 className="h2" {...tid('product-results-heading')}>
           {filtered ? 'Results' : 'All products'}
           {products && (
-            <span className="muted count" data-testid="product-results-count">
+            <span className="muted count" {...tid('product-results-count')}>
               {' '}
               ({products.length})
             </span>
           )}
         </h2>
         {filtered && (
-          <button type="button" className="link-btn" onClick={() => setParams({}, { replace: true })} data-testid="home-clear-filters">
+          <button type="button" className="link-btn" onClick={() => setParams({}, { replace: true })} {...tid('home-clear-filters')}>
             Clear filters
           </button>
         )}
       </div>
 
       {error && (
-        <p className="alert alert-error" role="alert" data-testid="home-error">
+        <p className="alert alert-error" role="alert" {...tid('home-error')}>
           {error}
         </p>
       )}
       {!products && !error && <Loading label="Loading products…" />}
       {products && products.length === 0 && (
-        <div className="empty" data-testid="home-no-results">
+        <div className="empty" {...tid('home-no-results')}>
           No products match “{q}”. Try another search or category.
         </div>
       )}
       {products && products.length > 0 && (
-        <div className="grid" data-testid="product-grid">
+        <div className="grid" {...tid('product-grid')}>
           {products.map((p) => (
-            <div className="card" key={p.id} data-testid={`product-card-${p.id}`}>
-              <Link to={`/products/${p.id}`} className="card-link" data-testid={`product-link-${p.id}`}>
+            <div className="card" key={p.id} {...tid(`product-card-${p.id}`)}>
+              <Link to={`/products/${p.id}`} className="card-link" {...tid(`product-link-${p.id}`)}>
                 <ProductImage product={p} className="card-img" />
-                <span className="card-title" data-testid="product-name">
+                {/* These repeat in every card, so the Maestro id is scoped by product. */}
+                <span className="card-title" data-testid="product-name" id={`product-name-${p.id}`}>
                   {p.name}
                 </span>
                 <span className="card-sub">{p.subtitle}</span>
-                <span className="card-price" data-testid="product-price">
+                <span className="card-price" data-testid="product-price" id={`product-price-${p.id}`}>
                   {formatMoney(p.price)}
                 </span>
                 {p.popular && p.inStock && (
-                  <span className="pill pill-accent" data-testid="product-popular">
+                  <span className="pill pill-accent" data-testid="product-popular" id={`product-popular-${p.id}`}>
                     Popular
                   </span>
                 )}
                 {!p.inStock && (
-                  <span className="pill pill-muted" data-testid="product-out-of-stock">
+                  <span className="pill pill-muted" data-testid="product-out-of-stock" id={`product-out-of-stock-${p.id}`}>
                     Out of stock
                   </span>
                 )}

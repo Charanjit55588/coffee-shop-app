@@ -22,6 +22,32 @@ let db = createSeed();
 const sessions = new Map(); // token -> userId
 
 const app = express();
+
+// CORS for clients on another origin: the Capacitor Android WebView (http://localhost,
+// or https/capacitor schemes) and the Vite dev/preview ports. The web app normally goes
+// through the Vite proxy, which is same-origin and doesn't need this.
+const CORS_ORIGINS = new Set([
+  'http://localhost',
+  'https://localhost',
+  'capacitor://localhost',
+  'http://localhost:5173',
+  'http://localhost:4173',
+]);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && CORS_ORIGINS.has(origin)) {
+    res.set({
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+      'Access-Control-Allow-Headers': 'Authorization, Content-Type',
+      'Access-Control-Max-Age': '600',
+      Vary: 'Origin',
+    });
+  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  next();
+});
+
 app.use(express.json());
 
 // Optional artificial latency, handy for practising explicit waits.

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../AppContext.jsx';
 import { SaveBar, SettingsPage, TextField, useProfileSave } from '../components/profile.jsx';
+import { tid } from '../testid.js';
 
 function toForm(user) {
   return { username: user.username, phone: user.phone, address: { ...user.address } };
@@ -25,13 +26,12 @@ export default function ProfilePersonal() {
 
   return (
     <SettingsPage title="Personal info" testId="screen-profile-personal">
-      <form className="stack-lg" onSubmit={onSubmit} noValidate data-testid="profile-personal-form">
+      <form className="stack-lg" onSubmit={onSubmit} noValidate {...tid('profile-personal-form')}>
         <section aria-labelledby="pi-h" className="stack-sm">
           <h2 id="pi-h" className="h3">
             Account
           </h2>
           <TextField
-            id="profile-username"
             label="Username"
             value={form.username}
             onChange={(v) => edit((f) => ((f.username = v), f))}
@@ -40,7 +40,6 @@ export default function ProfilePersonal() {
             autoComplete="username"
           />
           <TextField
-            id="profile-phone"
             label="Phone (optional)"
             type="tel"
             placeholder="e.g. 416 555 0123"
@@ -57,7 +56,6 @@ export default function ProfilePersonal() {
             Shipping address
           </h2>
           <TextField
-            id="addr-street"
             label="Street"
             value={form.address.street}
             onChange={setAddress('street')}
@@ -66,7 +64,6 @@ export default function ProfilePersonal() {
             autoComplete="street-address"
           />
           <TextField
-            id="addr-city"
             label="City"
             value={form.address.city}
             onChange={setAddress('city')}
@@ -76,7 +73,6 @@ export default function ProfilePersonal() {
           />
           <div className="grid">
             <TextField
-              id="addr-region"
               label="Province / State"
               value={form.address.region}
               onChange={setAddress('region')}
@@ -85,7 +81,6 @@ export default function ProfilePersonal() {
               autoComplete="address-level1"
             />
             <TextField
-              id="addr-postal"
               label="Postal / ZIP"
               value={form.address.postalCode}
               onChange={setAddress('postalCode')}

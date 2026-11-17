@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api, formatMoney } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { BackLink, Loading } from '../components/common.jsx';
+import { tid } from '../testid.js';
 
 const DELIVERY = [
   { id: 'standard', label: 'Standard', eta: '3–5 days', price: 'Free over $75, else $5.00' },
@@ -37,9 +38,9 @@ export default function Checkout() {
   if (!cart) {
     if (!error) return <Loading label="Loading checkout…" />;
     return (
-      <main className="page page-no-tabs" data-testid="screen-checkout">
+      <main className="page page-no-tabs" {...tid('screen-checkout')}>
         <BackLink to="/cart" label="Back to cart" testId="checkout-back" />
-        <p className="alert alert-error" role="alert" data-testid="checkout-error">
+        <p className="alert alert-error" role="alert" {...tid('checkout-error')}>
           {error}
         </p>
       </main>
@@ -79,22 +80,23 @@ export default function Checkout() {
     }
   }
 
-  const inputProps = (name) => ({
-    id: `card-${name}`,
+  // Each card input uses its test ID as its id (see testid.js).
+  const inputProps = (name, testId) => ({
+    ...tid(testId),
     className: `input ${fieldErrors[name] ? 'invalid' : ''}`,
     value: payment[name],
     'aria-invalid': Boolean(fieldErrors[name]),
-    'aria-describedby': fieldErrors[name] ? `card-${name}-error` : undefined,
+    'aria-describedby': fieldErrors[name] ? `${testId}-error` : undefined,
   });
   const fieldError = (name, testId) =>
     fieldErrors[name] && (
-      <p id={`card-${name}-error`} className="field-error" data-testid={testId}>
+      <p className="field-error" {...tid(testId)}>
         {fieldErrors[name]}
       </p>
     );
 
   return (
-    <main className="page page-no-tabs" data-testid="screen-checkout">
+    <main className="page page-no-tabs" {...tid('screen-checkout')}>
       <div className="row gap-12">
         <BackLink to="/cart" label="Back to cart" testId="checkout-back" />
         <h1 className="h1">Checkout</h1>
@@ -105,12 +107,12 @@ export default function Checkout() {
           <h2 id="ship-h" className="h3">
             Shipping address
           </h2>
-          <Link to="/profile/personal" className="link-strong tap" data-testid="checkout-edit-address">
+          <Link to="/profile/personal" className="link-strong tap" {...tid('checkout-edit-address')}>
             {hasAddress ? 'Edit' : 'Add address'}
           </Link>
         </div>
         {hasAddress ? (
-          <div className="boxed" data-testid="checkout-address">
+          <div className="boxed" {...tid('checkout-address')}>
             <b>{user.name}</b>
             <br />
             {a.street}
@@ -118,13 +120,13 @@ export default function Checkout() {
             {a.city}, {a.region} {a.postalCode}
           </div>
         ) : (
-          <p className="alert alert-warning" data-testid="checkout-address-missing">
+          <p className="alert alert-warning" {...tid('checkout-address-missing')}>
             No shipping address yet. Add one in your profile to place an order.
           </p>
         )}
       </section>
 
-      <fieldset className="stack-sm" data-testid="checkout-delivery">
+      <fieldset className="stack-sm" {...tid('checkout-delivery')}>
         <legend className="h3 legend">Delivery</legend>
         {DELIVERY.map((d) => (
           <label key={d.id} className={`radio-card ${cart.delivery === d.id ? 'is-on' : ''}`}>
@@ -134,7 +136,7 @@ export default function Checkout() {
               value={d.id}
               checked={cart.delivery === d.id}
               onChange={() => chooseDelivery(d.id)}
-              data-testid={`delivery-${d.id}`}
+              {...tid(`delivery-${d.id}`)}
             />
             <span className="grow">
               <b>{d.label}</b> · {d.eta}
@@ -144,17 +146,16 @@ export default function Checkout() {
         ))}
       </fieldset>
 
-      <form className="stack" onSubmit={placeOrder} noValidate data-testid="payment-form">
+      <form className="stack" onSubmit={placeOrder} noValidate {...tid('payment-form')}>
         <h2 className="h3">Payment</h2>
         <div className="field">
-          <label htmlFor="card-cardNumber">Card number</label>
+          <label htmlFor="card-number">Card number</label>
           <input
-            {...inputProps('cardNumber')}
+            {...inputProps('cardNumber', 'card-number')}
             inputMode="numeric"
             autoComplete="cc-number"
             placeholder="1234 5678 9012 3456"
             onChange={(e) => setField('cardNumber', formatCardNumber(e.target.value))}
-            data-testid="card-number"
           />
           {fieldError('cardNumber', 'card-number-error')}
         </div>
@@ -162,25 +163,23 @@ export default function Checkout() {
           <div className="field">
             <label htmlFor="card-expiry">Expiry</label>
             <input
-              {...inputProps('expiry')}
+              {...inputProps('expiry', 'card-expiry')}
               inputMode="numeric"
               autoComplete="cc-exp"
               placeholder="MM/YY"
               onChange={(e) => setField('expiry', formatExpiry(e.target.value))}
-              data-testid="card-expiry"
             />
             {fieldError('expiry', 'card-expiry-error')}
           </div>
           <div className="field">
             <label htmlFor="card-cvc">CVC</label>
             <input
-              {...inputProps('cvc')}
+              {...inputProps('cvc', 'card-cvc')}
               inputMode="numeric"
               autoComplete="cc-csc"
               placeholder="123"
               maxLength={4}
               onChange={(e) => setField('cvc', e.target.value.replace(/\D/g, ''))}
-              data-testid="card-cvc"
             />
             {fieldError('cvc', 'card-cvc-error')}
           </div>
@@ -188,16 +187,16 @@ export default function Checkout() {
         <p className="muted small">Demo app: payments are simulated and no real card is charged.</p>
 
         {error && (
-          <p className="alert alert-error" role="alert" data-testid="checkout-error">
+          <p className="alert alert-error" role="alert" {...tid('checkout-error')}>
             {error}
           </p>
         )}
 
         <div className="row-between total-row">
           <span>Total</span>
-          <span data-testid="checkout-total">{formatMoney(cart.total)}</span>
+          <span {...tid('checkout-total')}>{formatMoney(cart.total)}</span>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={submitting} data-testid="place-order">
+        <button type="submit" className="btn btn-primary" disabled={submitting} {...tid('place-order')}>
           {submitting ? 'Placing order…' : 'Place order'}
         </button>
       </form>

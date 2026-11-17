@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../AppContext.jsx';
 import { BellIcon, ChevronRightIcon, IdCardIcon, LogoutIcon, MoonIcon } from '../components/Icons.jsx';
 import { APPEARANCES, CHANNELS, NOTIFICATION_TOPICS } from '../components/profile.jsx';
+import { tid } from '../testid.js';
 
 function personalSummary(user) {
   const a = user.address;
@@ -19,13 +20,13 @@ function notificationSummary(n) {
 function MenuRow({ to, icon: RowIcon, title, summary, testId }) {
   return (
     <li>
-      <Link to={to} className="menu-row" data-testid={testId}>
+      <Link to={to} className="menu-row" {...tid(testId)}>
         <span className="menu-icon">
           <RowIcon size={20} />
         </span>
         <span className="grow stack-xxs min0">
           <span className="menu-title">{title}</span>
-          <span className="card-sub truncate" data-testid={`${testId}-summary`}>
+          <span className="card-sub truncate" {...tid(`${testId}-summary`)}>
             {summary}
           </span>
         </span>
@@ -52,15 +53,15 @@ export default function Profile() {
   }
 
   return (
-    <main className="page" data-testid="screen-profile">
+    <main className="page" {...tid('screen-profile')}>
       <header className="profile-header">
-        <div className="avatar avatar-lg" aria-hidden="true" data-testid="profile-avatar">
+        <div className="avatar avatar-lg" aria-hidden="true" {...tid('profile-avatar')}>
           {initials}
         </div>
-        <h1 className="h2-lg" data-testid="profile-display-name">
+        <h1 className="h2-lg" {...tid('profile-display-name')}>
           {user.name}
         </h1>
-        <span className="muted" data-testid="profile-email">
+        <span className="muted" {...tid('profile-email')}>
           {user.email}
         </span>
       </header>
@@ -91,7 +92,7 @@ export default function Profile() {
         </ul>
       </nav>
 
-      <button type="button" className="btn btn-danger-outline btn-sm logout-btn" onClick={onLogout} data-testid="logout">
+      <button type="button" className="btn btn-danger-outline btn-sm logout-btn" onClick={onLogout} {...tid('logout')}>
         <LogoutIcon size={18} />
         Log out
       </button>

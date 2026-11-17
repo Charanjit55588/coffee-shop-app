@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { EMAIL_RE, PASSWORD_RE } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { BackLink } from '../components/common.jsx';
+import { tid } from '../testid.js';
 
 const PASSWORD_HINT = 'At least 8 characters, with a letter and a number.';
 
@@ -58,38 +59,40 @@ export default function Signup() {
     }
   }
 
-  const field = (key, label, props = {}) => (
-    <div className="field">
-      <label htmlFor={`signup-${key}`}>{label}</label>
-      <input
-        id={`signup-${key}`}
-        className={`input ${errors[key] ? 'invalid' : ''}`}
-        value={form[key]}
-        onChange={set(key)}
-        aria-invalid={Boolean(errors[key])}
-        aria-describedby={errors[key] ? `signup-${key}-error` : undefined}
-        data-testid={`signup-${key === 'confirmPassword' ? 'confirm-password' : key}`}
-        {...props}
-      />
-      {errors[key] && (
-        <p id={`signup-${key}-error`} className="field-error" data-testid={`signup-${key === 'confirmPassword' ? 'confirm-password' : key}-error`}>
-          {errors[key]}
-        </p>
-      )}
-    </div>
-  );
+  const field = (key, label, props = {}) => {
+    const testId = `signup-${key === 'confirmPassword' ? 'confirm-password' : key}`;
+    return (
+      <div className="field">
+        <label htmlFor={testId}>{label}</label>
+        <input
+          className={`input ${errors[key] ? 'invalid' : ''}`}
+          value={form[key]}
+          onChange={set(key)}
+          aria-invalid={Boolean(errors[key])}
+          aria-describedby={errors[key] ? `${testId}-error` : undefined}
+          {...tid(testId)}
+          {...props}
+        />
+        {errors[key] && (
+          <p className="field-error" {...tid(`${testId}-error`)}>
+            {errors[key]}
+          </p>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <main className="page auth-page signup-page" data-testid="screen-signup">
+    <main className="page auth-page signup-page" {...tid('screen-signup')}>
       <BackLink to="/login" label="Back to sign in" testId="signup-back" />
       <div className="stack-sm">
         <h1 className="h1">Create your account</h1>
         <p className="muted">Save favorites, track orders and check out faster.</p>
       </div>
 
-      <form className="stack" onSubmit={onSubmit} noValidate data-testid="signup-form">
+      <form className="stack" onSubmit={onSubmit} noValidate {...tid('signup-form')}>
         {formError && (
-          <p className="alert alert-error" role="alert" data-testid="signup-error">
+          <p className="alert alert-error" role="alert" {...tid('signup-error')}>
             {formError}
           </p>
         )}
@@ -100,7 +103,6 @@ export default function Signup() {
           <label htmlFor="signup-password">Password</label>
           <div className="input-with-action">
             <input
-              id="signup-password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               className={`input ${errors.password ? 'invalid' : ''}`}
@@ -108,20 +110,20 @@ export default function Signup() {
               onChange={set('password')}
               aria-invalid={Boolean(errors.password)}
               aria-describedby={errors.password ? 'signup-password-error' : 'signup-password-hint'}
-              data-testid="signup-password"
+              {...tid('signup-password')}
             />
             <button
               type="button"
               className="input-action"
               onClick={() => setShowPassword((s) => !s)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              data-testid="signup-toggle-password"
+              {...tid('signup-toggle-password')}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
           {errors.password ? (
-            <p id="signup-password-error" className="field-error" data-testid="signup-password-error">
+            <p className="field-error" {...tid('signup-password-error')}>
               {errors.password}
             </p>
           ) : (
@@ -144,25 +146,25 @@ export default function Signup() {
               onChange={set('acceptTerms')}
               aria-invalid={Boolean(errors.acceptTerms)}
               aria-describedby={errors.acceptTerms ? 'signup-terms-error' : undefined}
-              data-testid="signup-terms"
+              {...tid('signup-terms')}
             />
             <span>I agree to the Terms of Service and Privacy Policy.</span>
           </label>
           {errors.acceptTerms && (
-            <p id="signup-terms-error" className="field-error" data-testid="signup-terms-error">
+            <p className="field-error" {...tid('signup-terms-error')}>
               {errors.acceptTerms}
             </p>
           )}
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={submitting} data-testid="signup-submit">
+        <button type="submit" className="btn btn-primary" disabled={submitting} {...tid('signup-submit')}>
           {submitting ? 'Creating account…' : 'Create account'}
         </button>
       </form>
 
       <p className="muted center push-bottom">
         Already have an account?{' '}
-        <Link to="/login" className="link-strong" data-testid="signup-signin-link">
+        <Link to="/login" className="link-strong" {...tid('signup-signin-link')}>
           Sign in
         </Link>
       </p>

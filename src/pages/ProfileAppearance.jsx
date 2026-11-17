@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../AppContext.jsx';
 import { APPEARANCES, SaveBar, SettingsPage, useProfileSave } from '../components/profile.jsx';
+import { tid } from '../testid.js';
 
 export default function ProfileAppearance() {
   const { appearance, setAppearance } = useApp();
@@ -18,12 +19,11 @@ export default function ProfileAppearance() {
 
   return (
     <SettingsPage title="Appearance" testId="screen-profile-appearance">
-      <form className="stack-lg" onSubmit={onSubmit} noValidate data-testid="appearance-form">
+      <form className="stack-lg" onSubmit={onSubmit} noValidate {...tid('appearance-form')}>
         <div className="field">
-          <label htmlFor="appearance-theme">Theme</label>
+          <label htmlFor="appearance-select">Theme</label>
           <div className="select-wrap">
             <select
-              id="appearance-theme"
               className="input select"
               value={value}
               onChange={(e) => {
@@ -31,7 +31,7 @@ export default function ProfileAppearance() {
                 clearMessage();
               }}
               aria-describedby="appearance-hint"
-              data-testid="appearance-select"
+              {...tid('appearance-select')}
             >
               {APPEARANCES.map((a) => (
                 <option key={a.id} value={a.id}>

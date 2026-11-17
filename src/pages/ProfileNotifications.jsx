@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../AppContext.jsx';
 import { CHANNELS, NOTIFICATION_TOPICS, SaveBar, SettingsPage, useProfileSave } from '../components/profile.jsx';
+import { tid } from '../testid.js';
 
 function toForm(user) {
   return { ...user.notifications, channels: { ...user.notifications.channels } };
@@ -24,7 +25,7 @@ export default function ProfileNotifications() {
 
   return (
     <SettingsPage title="Notification preferences" testId="screen-profile-notifications">
-      <form className="stack-lg" onSubmit={onSubmit} noValidate data-testid="notification-preferences">
+      <form className="stack-lg" onSubmit={onSubmit} noValidate {...tid('notification-preferences')}>
         <fieldset className="stack-none">
           <legend className="h3 legend">Tell me about</legend>
           {NOTIFICATION_TOPICS.map((t) => (
@@ -39,7 +40,7 @@ export default function ProfileNotifications() {
                 role="switch"
                 checked={form[t.id]}
                 onChange={(e) => edit((f) => ((f[t.id] = e.target.checked), f))}
-                data-testid={t.testId}
+                {...tid(t.testId)}
               />
             </label>
           ))}
@@ -53,7 +54,7 @@ export default function ProfileNotifications() {
                 type="checkbox"
                 checked={form.channels[c.id]}
                 onChange={(e) => edit((f) => ((f.channels[c.id] = e.target.checked), f))}
-                data-testid={`channel-${c.id}`}
+                {...tid(`channel-${c.id}`)}
               />
               {c.label}
             </label>

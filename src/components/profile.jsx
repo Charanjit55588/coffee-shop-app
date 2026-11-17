@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { api } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { BackLink } from './common.jsx';
+import { tid } from '../testid.js';
 
 export const NOTIFICATION_TOPICS = [
   { id: 'orderUpdates', label: 'Order updates', hint: 'Shipping and delivery status', testId: 'notify-order-updates' },
@@ -24,7 +25,7 @@ export const APPEARANCES = [
 // A settings screen opened from the Profile hub.
 export function SettingsPage({ title, testId, children }) {
   return (
-    <main className="page" data-testid={testId}>
+    <main className="page" {...tid(testId)}>
       <div className="row gap-12">
         <BackLink to="/profile" label="Back to profile" testId="settings-back" />
         <h1 className="h1">{title}</h1>
@@ -34,22 +35,22 @@ export function SettingsPage({ title, testId, children }) {
   );
 }
 
-export function TextField({ id, label, value, onChange, error, testId, ...rest }) {
+// The input's id is its test ID, so the label, the error and Maestro all point at it.
+export function TextField({ label, value, onChange, error, testId, ...rest }) {
   return (
     <div className="field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={testId}>{label}</label>
       <input
-        id={id}
         className={`input ${error ? 'invalid' : ''}`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${id}-error` : undefined}
-        data-testid={testId}
+        aria-describedby={error ? `${testId}-error` : undefined}
+        {...tid(testId)}
         {...rest}
       />
       {error && (
-        <p id={`${id}-error`} className="field-error" data-testid={`${testId}-error`}>
+        <p className="field-error" {...tid(`${testId}-error`)}>
           {error}
         </p>
       )}
@@ -97,13 +98,13 @@ export function SaveBar({ message, saving, dirty }) {
         <p
           className={`alert ${message.type === 'success' ? 'alert-success' : 'alert-error'}`}
           role={message.type === 'success' ? 'status' : 'alert'}
-          data-testid={message.type === 'success' ? 'profile-save-success' : 'profile-save-error'}
+          {...tid(message.type === 'success' ? 'profile-save-success' : 'profile-save-error')}
         >
           {message.text}
         </p>
       )}
       <div className="actions-row">
-        <button type="submit" className="btn btn-primary btn-sm" disabled={saving || !dirty} data-testid="profile-save">
+        <button type="submit" className="btn btn-primary btn-sm" disabled={saving || !dirty} {...tid('profile-save')}>
           {saving ? 'Saving…' : 'Save changes'}
         </button>
       </div>

@@ -1,0 +1,8 @@
+{
+  "appId": "com.beanbrew.demo",
+  "appName": "Bean & Brew",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http"
+  }
+}

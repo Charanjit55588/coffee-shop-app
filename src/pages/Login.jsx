@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { EMAIL_RE } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { CupIcon } from '../components/Icons.jsx';
+import { tid } from '../testid.js';
 
 export default function Login() {
   const { login, status } = useApp();
@@ -41,7 +42,7 @@ export default function Login() {
   }
 
   return (
-    <main className="page auth-page" data-testid="screen-login">
+    <main className="page auth-page" {...tid('screen-login')}>
       <div className="brand">
         <div className="brand-mark">
           <CupIcon size={32} />
@@ -50,16 +51,15 @@ export default function Login() {
         <p className="muted">Sign in to your account</p>
       </div>
 
-      <form className="stack" onSubmit={onSubmit} noValidate data-testid="login-form">
+      <form className="stack" onSubmit={onSubmit} noValidate {...tid('login-form')}>
         {formError && (
-          <p className="alert alert-error" role="alert" data-testid="login-error">
+          <p className="alert alert-error" role="alert" {...tid('login-error')}>
             {formError}
           </p>
         )}
         <div className="field">
           <label htmlFor="login-email">Email</label>
           <input
-            id="login-email"
             type="email"
             autoComplete="username"
             placeholder="you@example.com"
@@ -68,10 +68,10 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={Boolean(errors.email)}
             aria-describedby={errors.email ? 'login-email-error' : undefined}
-            data-testid="login-email"
+            {...tid('login-email')}
           />
           {errors.email && (
-            <p id="login-email-error" className="field-error" data-testid="login-email-error">
+            <p className="field-error" {...tid('login-email-error')}>
               {errors.email}
             </p>
           )}
@@ -80,7 +80,6 @@ export default function Login() {
           <label htmlFor="login-password">Password</label>
           <div className="input-with-action">
             <input
-              id="login-password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               placeholder="Password"
@@ -89,20 +88,20 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               aria-invalid={Boolean(errors.password)}
               aria-describedby={errors.password ? 'login-password-error' : undefined}
-              data-testid="login-password"
+              {...tid('login-password')}
             />
             <button
               type="button"
               className="input-action"
               onClick={() => setShowPassword((s) => !s)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              data-testid="login-toggle-password"
+              {...tid('login-toggle-password')}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
           {errors.password && (
-            <p id="login-password-error" className="field-error" data-testid="login-password-error">
+            <p className="field-error" {...tid('login-password-error')}>
               {errors.password}
             </p>
           )}
@@ -113,22 +112,22 @@ export default function Login() {
               type="checkbox"
               checked={remember}
               onChange={(e) => setRemember(e.target.checked)}
-              data-testid="login-remember"
+              {...tid('login-remember')}
             />
             Remember me
           </label>
-          <Link to="/forgot-password" className="link-strong tap" data-testid="login-forgot-link">
+          <Link to="/forgot-password" className="link-strong tap" {...tid('login-forgot-link')}>
             Forgot password?
           </Link>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={submitting} data-testid="login-submit">
+        <button type="submit" className="btn btn-primary" disabled={submitting} {...tid('login-submit')}>
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
 
       <p className="muted center push-bottom">
         New here?{' '}
-        <Link to="/signup" className="link-strong" data-testid="login-signup-link">
+        <Link to="/signup" className="link-strong" {...tid('login-signup-link')}>
           Create an account
         </Link>
       </p>

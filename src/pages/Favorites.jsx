@@ -4,6 +4,7 @@ import { api, formatMoney } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { Loading, ProductImage, Toast } from '../components/common.jsx';
 import { HeartIcon, PlusIcon } from '../components/Icons.jsx';
+import { tid } from '../testid.js';
 
 export default function Favorites() {
   const { toggleFavorite, setCartCount } = useApp();
@@ -33,11 +34,11 @@ export default function Favorites() {
   }
 
   return (
-    <main className="page" data-testid="screen-favorites">
+    <main className="page" {...tid('screen-favorites')}>
       <div className="row-between baseline">
         <h1 className="h1-lg">Favorites</h1>
         {items && (
-          <span className="muted" data-testid="favorites-count">
+          <span className="muted" {...tid('favorites-count')}>
             {items.length} {items.length === 1 ? 'item' : 'items'}
           </span>
         )}
@@ -50,17 +51,17 @@ export default function Favorites() {
       )}
       {!items && !error && <Loading />}
       {items && items.length === 0 && (
-        <div className="empty" data-testid="favorites-empty">
+        <div className="empty" {...tid('favorites-empty')}>
           <p>No favorites yet. Tap the heart on any product to save it here.</p>
-          <Link to="/" className="link-strong" data-testid="favorites-browse">
+          <Link to="/" className="link-strong" {...tid('favorites-browse')}>
             Browse products
           </Link>
         </div>
       )}
       {items && items.length > 0 && (
-        <ul className="list" data-testid="favorites-list">
+        <ul className="list" {...tid('favorites-list')}>
           {items.map((p) => (
-            <li key={p.id} className="list-row" data-testid={`favorite-item-${p.id}`}>
+            <li key={p.id} className="list-row" {...tid(`favorite-item-${p.id}`)}>
               <Link to={`/products/${p.id}`} className="list-main">
                 <ProductImage product={p} className="thumb" />
                 <span className="stack-xxs">
@@ -74,7 +75,7 @@ export default function Favorites() {
                 className="icon-btn fav-btn is-on fav-soft"
                 aria-label={`Remove ${p.name} from favorites`}
                 onClick={() => remove(p)}
-                data-testid={`favorite-remove-${p.id}`}
+                {...tid(`favorite-remove-${p.id}`)}
               >
                 <HeartIcon size={20} filled />
               </button>
@@ -84,7 +85,7 @@ export default function Favorites() {
                 aria-label={`Add ${p.name} to cart`}
                 onClick={() => addToCart(p)}
                 disabled={!p.inStock}
-                data-testid={`favorite-add-to-cart-${p.id}`}
+                {...tid(`favorite-add-to-cart-${p.id}`)}
               >
                 <PlusIcon size={20} />
               </button>

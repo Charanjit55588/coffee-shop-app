@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { api, formatMoney } from '../api.js';
 import { useApp } from '../AppContext.jsx';
 import { BackLink, FavoriteButton, Loading, ProductImage, Stepper, Toast } from '../components/common.jsx';
+import { tid } from '../testid.js';
 
 const SIZE_MULTIPLIER = { '250g': 1, '500g': 1.8, '1kg': 3.4 };
 
@@ -19,7 +20,7 @@ function OptionGroup({ label, name, options, value, onChange }) {
             type="button"
             aria-pressed={value === o.id}
             onClick={() => onChange(o.id)}
-            data-testid={`${name}-${o.id}`}
+            {...tid(`${name}-${o.id}`)}
           >
             {o.label}
           </button>
@@ -57,9 +58,9 @@ export default function Product() {
 
   if (error) {
     return (
-      <main className="page" data-testid="screen-product">
+      <main className="page" {...tid('screen-product')}>
         <BackLink to="/" label="Back to Home" testId="product-back" />
-        <p className="alert alert-error" role="alert" data-testid="product-error">
+        <p className="alert alert-error" role="alert" {...tid('product-error')}>
           {error}
         </p>
       </main>
@@ -78,7 +79,7 @@ export default function Product() {
         id: Date.now(),
         message: `Added ${quantity} × ${product.name} to your cart.`,
         action: (
-          <Link to="/cart" className="toast-action" data-testid="toast-view-cart">
+          <Link to="/cart" className="toast-action" {...tid('toast-view-cart')}>
             View cart
           </Link>
         ),
@@ -91,7 +92,7 @@ export default function Product() {
   }
 
   return (
-    <main className="page" data-testid="screen-product">
+    <main className="page" {...tid('screen-product')}>
       <div className="topbar">
         <BackLink to="/" label="Back to Home" testId="product-back" />
         <span className="topbar-title">Details</span>
@@ -103,19 +104,19 @@ export default function Product() {
       <div className="stack-xs">
         <span className="eyebrow">{product.subtitle}</span>
         <div className="row-between baseline">
-          <h1 className="h1" data-testid="product-name">
+          <h1 className="h1" {...tid('product-name')}>
             {product.name}
           </h1>
-          <span className="price-lg" data-testid="product-price">
+          <span className="price-lg" {...tid('product-price')}>
             {formatMoney(unit)}
           </span>
         </div>
-        <span className={product.inStock ? 'ok-text' : 'error-text'} data-testid="product-stock">
+        <span className={product.inStock ? 'ok-text' : 'error-text'} {...tid('product-stock')}>
           {product.inStock ? 'In stock' : 'Out of stock'}
         </span>
       </div>
 
-      <p className="body-text" data-testid="product-description">
+      <p className="body-text" {...tid('product-description')}>
         {product.description}
       </p>
 
@@ -139,7 +140,7 @@ export default function Product() {
           className="btn btn-primary grow"
           onClick={addToCart}
           disabled={!product.inStock || adding}
-          data-testid="add-to-cart"
+          {...tid('add-to-cart')}
         >
           {product.inStock ? `Add to cart · ${formatMoney(unit * quantity)}` : 'Out of stock'}
         </button>
